@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "target": "ES5",
+        "outDir": "ezai-scraper-api",
+        "rootDir": "./",
+        "esModuleInterop": true,
+    }
+}
