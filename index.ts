@@ -4,11 +4,14 @@ import cors from "cors"
 require("dotenv").config();
 const { Configuration, OpenAIApi } = require("openai");
 
+function configureAI (key: string) {
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: key,
   });
 
 const openai = new OpenAIApi(configuration);
+return openai
+}
 
 const app = express();
 const port = process.env.PORT || 8082;
@@ -20,6 +23,14 @@ app.use(cors({ origin: false }));
 //Get notes from a url
 app.post("/notes", async (req, res) => {
     const URI: string = req.body.URI;
+    const openAiKey: string = req.headers.key ? req.headers.key as string : process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY : "";
+
+    if (openAiKey === "") {
+        return res.status(400).json({status: "failure", message: "No API key provided"});
+    }
+
+    const openai = configureAI(openAiKey);
+
     console.log(URI)
     //Open new browser 
     const browser = await puppeteer.launch({
@@ -202,6 +213,13 @@ app.post("/notes", async (req, res) => {
 //Create a summary for a given URL
 app.post("/summary", async (req, res) => {
     const URI = req.body.URI;
+    const openAiKey: string = req.headers.key ? req.headers.key as string : process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY : "";
+    
+    if (openAiKey === "") {
+        return res.status(400).json({status: "failure", message: "No API key provided"});
+    }
+
+    const openai = configureAI(openAiKey);
     //Open new browser 
     const browser = await puppeteer.launch({
         headless: true,
