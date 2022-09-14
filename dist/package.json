@@ -2,9 +2,9 @@
   "name": "scraper-api",
   "version": "0.0.1",
   "description": "Scrape web pages",
-  "main": "index.ts",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "nodemon index.ts",
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

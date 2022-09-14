@@ -4,7 +4,7 @@
         "experimentalDecorators": true,
         "module": "commonjs",
         "target": "ES5",
-        "outDir": "ezai-scraper-api",
+        "outDir": "dist",
         "rootDir": "./",
         "esModuleInterop": true,
     }
