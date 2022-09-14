@@ -8,7 +8,7 @@
     "test": "nodemon index.ts",
     "build": "tsc"
   },
-  "author": "",
+  "author": "Saluana",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
