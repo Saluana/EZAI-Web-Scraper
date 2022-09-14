@@ -1,11 +1,12 @@
 {
   "name": "scraper-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Scrape web pages",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "nodemon ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./dist/src/index.js",
+    "test": "nodemon index.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "MIT",
