@@ -4,7 +4,7 @@
   "description": "Scrape web pages",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "nodemon ./dist/src/index.js",
+    "start": "node ./dist/src/index.js",
     "test": "nodemon index.ts",
     "build": "tsc"
   },
