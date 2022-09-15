@@ -35,8 +35,10 @@ async function fetchSummary (req: Request, res: Response) {
     //Fetch notes from open api
     const completeSummary = await prompt.getSummary(splitContent, openAiKey);
 
+    if (completeSummary.status === "failure") return res.json({completeSummary});
+
     if (completeSummary){
-        return res.json({status: "success", message: "Summary created", summary: completeSummary, title: title});
+        return res.json({status: "success", message: "Summary created", summary: completeSummary.summary, title: title});
     } else {
         return res.json({status: "failure", message: "No summary found."});
     }
