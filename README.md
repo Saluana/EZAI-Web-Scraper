@@ -4,7 +4,7 @@ An API that allows you to scrape blog posts and articles and get a list of notes
 
 ### Enviroment Variables
 
-OPENAI*API_KEY={YOUR API KEY} *(Not required. Key can be provided in the request headers)\_
+OPENAI_API_KEY={YOUR API KEY} (Not required. Key can be provided in the request headers)
 
 PORT={YOUR CHOSEN PORT} (Required)
 
