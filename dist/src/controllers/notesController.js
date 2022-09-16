@@ -48,7 +48,7 @@ function fetchNotes(req, res) {
         if (!(0, instanceCheck_1.instanceOfSuccess)(completeNotes))
             return res.json(completeNotes);
         if (completeNotes.notes.length > 0) {
-            return res.status(200).json({ status: "success", message: "Notes Created", notes: completeNotes, title: title });
+            return res.status(200).json({ status: "success", message: "Notes Created", notes: completeNotes.notes, title: title });
         }
         else {
             return res.status(200).json({ status: "failure", message: "No Notes Found" });
