@@ -13,9 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
-function contentFinder(URI) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const browser = yield puppeteer_1.default.launch({
+const browser = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return puppeteer_1.default.launch({
             headless: true,
             args: [
                 "--disable-gpu",
@@ -24,14 +24,28 @@ function contentFinder(URI) {
                 "--no-sandbox",
             ]
         });
-        //Open new page
-        const page = yield browser.newPage();
+    }
+    catch (error) {
+        console.log(error);
+        return;
+    }
+});
+const pageInstance = (browser) => __awaiter(void 0, void 0, void 0, function* () {
+    const page = yield browser.newPage();
+    try {
+        return page;
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+function contentFinder(URI) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const page = yield pageInstance(yield browser());
         //Try going to provided url
         try {
-            page.setDefaultNavigationTimeout(0);
             yield page.goto(URI, {
                 waitUntil: "domcontentloaded",
-                timeout: 0
             });
         }
         catch (error) {
@@ -94,10 +108,10 @@ function contentFinder(URI) {
         }
         catch (error) {
             console.log(error);
-            yield browser.close();
+            page.close();
             return { status: "failure", message: "Problem evaluating web page." };
         }
-        yield browser.close();
+        page.close();
         if (textContent === null)
             return { status: "failure", message: "No article found" };
         return { status: "success", title: title, text: textContent };

@@ -1,25 +1,39 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Browser } from "puppeteer";
 import { SuccessMessage, ErrorMessage } from "../types/types";
 
-export default async function contentFinder(URI: string): Promise<SuccessMessage | ErrorMessage> {
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: [
-            "--disable-gpu",
-            "--disable-dev-shm-usage",
-            "--disable-setuid-sandbox",
-            "--no-sandbox",
-        ]
-    });
-    //Open new page
+const browser = async () => { 
+    try { 
+    return puppeteer.launch({
+    headless: true,
+    args: [
+        "--disable-gpu",
+        "--disable-dev-shm-usage",
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+    ]
+}) } catch (error) {
+    console.log(error)
+    return
+}
+ };
+
+const pageInstance = async (browser: Browser) => {
     const page = await browser.newPage();
+    try {
+        return page
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export default async function contentFinder(URI: string): Promise<SuccessMessage | ErrorMessage> {
+
+    const page = await pageInstance(await browser())
 
     //Try going to provided url
     try {
-    page.setDefaultNavigationTimeout(0)
     await page.goto(URI, {
         waitUntil: "domcontentloaded",
-        timeout: 0
     });
     } catch (error) {
         console.log(error);
@@ -76,11 +90,11 @@ export default async function contentFinder(URI: string): Promise<SuccessMessage
     })
     } catch (error) {
     console.log(error);
-    await browser.close();
+    page.close()
     return {status: "failure", message: "Problem evaluating web page."} as ErrorMessage;
     }
-
-    await browser.close();
+    
+    page.close()
     
     if (textContent === null) return {status: "failure", message: "No article found"} as ErrorMessage;
     return {status: "success", title: title, text: textContent} as SuccessMessage;
