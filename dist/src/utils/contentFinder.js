@@ -28,8 +28,10 @@ function contentFinder(URI) {
         const page = yield browser.newPage();
         //Try going to provided url
         try {
+            page.setDefaultNavigationTimeout(0);
             yield page.goto(URI, {
                 waitUntil: "domcontentloaded",
+                timeout: 0
             });
         }
         catch (error) {

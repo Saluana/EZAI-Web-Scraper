@@ -16,8 +16,10 @@ export default async function contentFinder(URI: string): Promise<SuccessMessage
 
     //Try going to provided url
     try {
+    page.setDefaultNavigationTimeout(0)
     await page.goto(URI, {
         waitUntil: "domcontentloaded",
+        timeout: 0
     });
     } catch (error) {
         console.log(error);
