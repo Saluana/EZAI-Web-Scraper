@@ -20,7 +20,8 @@ export default async function contentFinder(URI: string): Promise<SuccessMessage
         waitUntil: "domcontentloaded",
     });
     } catch (error) {
-        return {status: "failure", message: "Page not found."}
+        console.log(error);
+        return {status: "failure", message: "Error navigating to web page."}
     }
 
     const title = await page.title();
@@ -74,7 +75,7 @@ export default async function contentFinder(URI: string): Promise<SuccessMessage
     } catch (error) {
     console.log(error);
     await browser.close();
-    return {status: "failure", message: "Problem finding article"} as ErrorMessage;
+    return {status: "failure", message: "Problem evaluating web page."} as ErrorMessage;
     }
 
     await browser.close();

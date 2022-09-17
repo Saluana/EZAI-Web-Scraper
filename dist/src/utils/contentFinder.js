@@ -33,7 +33,8 @@ function contentFinder(URI) {
             });
         }
         catch (error) {
-            return { status: "failure", message: "Page not found." };
+            console.log(error);
+            return { status: "failure", message: "Error navigating to web page." };
         }
         const title = yield page.title();
         try {
@@ -92,7 +93,7 @@ function contentFinder(URI) {
         catch (error) {
             console.log(error);
             yield browser.close();
-            return { status: "failure", message: "Problem finding article" };
+            return { status: "failure", message: "Problem evaluating web page." };
         }
         yield browser.close();
         if (textContent === null)
