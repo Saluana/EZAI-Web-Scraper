@@ -1,7 +1,14 @@
 import puppeteer, { Browser } from "puppeteer";
 import { SuccessMessage, ErrorMessage } from "../types/types";
 
-const browser = async () => { 
+const browserInstance = async () => { 
+    if (process.env.BROWSERLESS_API_KEY) {
+        console.log("Browserless is enabled")
+        return await puppeteer.connect({
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_API_KEY}`
+        })
+    }
+
     try { 
     return puppeteer.launch({
     headless: true,
@@ -17,18 +24,11 @@ const browser = async () => {
 }
  };
 
-const pageInstance = async (browser: Browser) => {
-    const page = await browser.newPage();
-    try {
-        return page
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 export default async function contentFinder(URI: string): Promise<SuccessMessage | ErrorMessage> {
 
-    const page = await pageInstance(await browser())
+    const browser = await browserInstance()
+    const page = await browser.newPage();
 
     //Try going to provided url
     try {
@@ -90,11 +90,11 @@ export default async function contentFinder(URI: string): Promise<SuccessMessage
     })
     } catch (error) {
     console.log(error);
-    page.close()
+    browser.close()
     return {status: "failure", message: "Problem evaluating web page."} as ErrorMessage;
     }
-    
-    page.close()
+
+    browser.close()
     
     if (textContent === null) return {status: "failure", message: "No article found"} as ErrorMessage;
     return {status: "success", title: title, text: textContent} as SuccessMessage;

@@ -13,7 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
-const browser = () => __awaiter(void 0, void 0, void 0, function* () {
+const browserInstance = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (process.env.BROWSERLESS_API_KEY) {
+        console.log("Browserless is enabled");
+        return yield puppeteer_1.default.connect({
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_API_KEY}`
+        });
+    }
     try {
         return puppeteer_1.default.launch({
             headless: true,
@@ -30,18 +36,10 @@ const browser = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
 });
-const pageInstance = (browser) => __awaiter(void 0, void 0, void 0, function* () {
-    const page = yield browser.newPage();
-    try {
-        return page;
-    }
-    catch (error) {
-        console.log(error);
-    }
-});
 function contentFinder(URI) {
     return __awaiter(this, void 0, void 0, function* () {
-        const page = yield pageInstance(yield browser());
+        const browser = yield browserInstance();
+        const page = yield browser.newPage();
         //Try going to provided url
         try {
             yield page.goto(URI, {
@@ -108,10 +106,10 @@ function contentFinder(URI) {
         }
         catch (error) {
             console.log(error);
-            page.close();
+            browser.close();
             return { status: "failure", message: "Problem evaluating web page." };
         }
-        page.close();
+        browser.close();
         if (textContent === null)
             return { status: "failure", message: "No article found" };
         return { status: "success", title: title, text: textContent };
