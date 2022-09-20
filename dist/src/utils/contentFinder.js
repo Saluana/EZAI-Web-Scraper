@@ -61,7 +61,6 @@ function contentFinder(URI) {
                     for (let i = 0; i < div.classList.length; i++) {
                         if (div.classList[i].includes('article') || div.classList[i].includes('post') || div.classList[i].includes('content')) {
                             div.querySelectorAll('p').forEach((p) => {
-                                //make sure there are no duplicates
                                 array.add(p.innerText);
                             });
                             contentWasFound = true;

@@ -41,7 +41,7 @@ export default async function contentFinder (URI: string) {
         const title = await page.title();
 
         try {
-        var content: any = await page.evaluate(()=>{
+        var content: string[] | null = await page.evaluate(()=>{
 
             const body = document.querySelector('body')
             const array = new Set()
@@ -52,7 +52,6 @@ export default async function contentFinder (URI: string) {
                 for (let i = 0; i < div.classList.length; i++) {
                     if (div.classList[i].includes('article') || div.classList[i].includes('post') || div.classList[i].includes('content')) {
                         div.querySelectorAll('p').forEach((p) => {
-                            //make sure there are no duplicates
                             array.add(p.innerText)
                         })
                         contentWasFound = true;
@@ -61,7 +60,7 @@ export default async function contentFinder (URI: string) {
                 }
             })
 
-            return Array.from(array)
+            return Array.from(array) as string[]
         })
     } catch (error) {
         console.log(error);
