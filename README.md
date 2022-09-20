@@ -6,7 +6,7 @@ An API that allows you to scrape blog posts and articles and get a list of notes
 
 1. Use browserless.io for scraping instead of the headless chromium that comes with puppeteer. It's faster and more reliable.
 2. For better results changed the language model to text-curie-001 or text-davinci-002. The default model is cheap, but not the greatest.
-3. For easiest deployment, use the docker image in the dist folder (Make sure you add the .env variables).
+3. For easiest deployment, use the docker file in the dist folder (Make sure you add the .env variables).
 4. If you make a cool feature or find a bug, please consider contributing!
 
 ### Enviroment Variables
