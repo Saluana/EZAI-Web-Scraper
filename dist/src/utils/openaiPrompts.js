@@ -84,9 +84,9 @@ function getSummaryChunk(chunk, apiKey) {
         try {
             var response = yield openai.createCompletion("text-babbage-001", {
                 prompt: `
-        Create a short summary with important information from the article below.
-        Article:${chunk}
-        Summary:`,
+            Write a concise summary of the following article, and remove any unwanted text, such as things related to website cookies,  website newletters, and website advertisements.
+            Article:${chunk}
+            Summary:`,
                 temperature: 0.9,
                 max_tokens: 700,
                 top_p: 1.0,

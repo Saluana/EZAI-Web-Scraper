@@ -74,30 +74,31 @@ async function getNotes(
 }
 
 /*      SUMMARY SECTION      */
-async function getSummaryChunk (chunk: string, apiKey: string): Promise<string | null> {
-    const openai = configureAI(apiKey);
 
-    try {
-    var response = await openai.createCompletion("text-babbage-001", {
-        prompt: `
-        Create a short summary with important information from the article below.
-        Article:${chunk}
-        Summary:`,
-        temperature: 0.9,
-        max_tokens: 700,
-        top_p: 1.0,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      });
-
-      console.log(response.data.choices[0])
-    } catch (error) {
-    console.log(error);
-    return null
-    }
-      const summarizedText: string = response.data.choices[0].text
-      return summarizedText
-    }
+    async function getSummaryChunk (chunk: string, apiKey: string): Promise<string | null> {
+        const openai = configureAI(apiKey);
+    
+        try {
+        var response = await openai.createCompletion("text-babbage-001", {
+            prompt: `
+            Write a concise summary of the following article, and remove any unwanted text, such as things related to website cookies,  website newletters, and website advertisements.
+            Article:${chunk}
+            Summary:`,
+            temperature: 0.9,
+            max_tokens: 700,
+            top_p: 1.0,
+            frequency_penalty: 0.5,
+            presence_penalty: 0.5,
+          });
+    
+          console.log(response.data.choices[0])
+        } catch (error) {
+        console.log(error);
+        return null
+        }
+          const summarizedText: string = response.data.choices[0].text
+          return summarizedText
+        }
 
 
 async function getSummary (splitContent: string[], apiKey: string) {
