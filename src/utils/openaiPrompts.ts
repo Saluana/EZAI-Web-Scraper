@@ -15,9 +15,9 @@ function configureAI(key: string) {
 async function getNote(chunk: string, apiKey: string): Promise<string | null> {
     const openai = configureAI(apiKey);
     try {
-        var response = await openai.createCompletion('text-babbage-001', {
+        var response = await openai.createCompletion('text-curie-001', {
             prompt: `
-        create a bullet point list of short notes from key topics in articles using "->" as the bullet point for each note:\n\n
+        create a bullet point list of short notes from key topics in articles using "->" as the bullet point for each note, and remove any unwanted text, such as things related to website cookies,  website newletters, and website advertisements.:\n\n
         Text: Bob is a boy who loves grasshoppers. He is 11 years old, has blonde hair, and likes to play fortnite 12 hours per day.\n\n
         Notes: ->Bob is a boy. ->Bob is 11 years old. ->Bob has blonde hair. ->Bob likes playing fortnite 12 hours a day.\n\n
         Text: Pitbulls are muscular dogs with strong jaws. They were originally bred for bull-baiting, but are now used as guard dogs or for dog fighting. Despite their reputation, they can be loving pets with proper training and responsible ownership.\n\n
@@ -84,7 +84,7 @@ async function getSummaryChunk(
     const openai = configureAI(apiKey);
 
     try {
-        var response = await openai.createCompletion('text-babbage-001', {
+        var response = await openai.createCompletion('text-curie-001', {
             prompt: `
             Write a concise summary of the following article, and remove any unwanted text, such as things related to website cookies,  website newletters, and website advertisements.
             Article:${chunk}
