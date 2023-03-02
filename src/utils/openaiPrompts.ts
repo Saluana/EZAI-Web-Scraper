@@ -2,14 +2,18 @@ const { Configuration, OpenAIApi } = require('openai');
 import contentFilter from './contentFilter';
 import { SuccessMessage, ErrorMessage } from '../types/types';
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+function configureAI(key: string) {
+    const configuration = new Configuration({
+        apiKey: key,
+    });
 
-export const openai = new OpenAIApi(configuration);
+    const openai = new OpenAIApi(configuration);
+    return openai;
+}
 
 /*    NOTE SECTION   */
 async function getNote(chunk: string, apiKey: string): Promise<string | null> {
+    const openai = configureAI(apiKey);
     let response;
 
     try {
@@ -93,6 +97,7 @@ async function getSummaryChunk(
     chunk: string,
     apiKey: string
 ): Promise<string | null> {
+    const openai = configureAI(apiKey);
     let response;
     try {
         response = await openai.createChatCompletion({

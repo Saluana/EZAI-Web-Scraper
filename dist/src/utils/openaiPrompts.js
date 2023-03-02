@@ -12,19 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openai = void 0;
 const { Configuration, OpenAIApi } = require('openai');
 const contentFilter_1 = __importDefault(require("./contentFilter"));
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-exports.openai = new OpenAIApi(configuration);
+function configureAI(key) {
+    const configuration = new Configuration({
+        apiKey: key,
+    });
+    const openai = new OpenAIApi(configuration);
+    return openai;
+}
 /*    NOTE SECTION   */
 function getNote(chunk, apiKey) {
     return __awaiter(this, void 0, void 0, function* () {
+        const openai = configureAI(apiKey);
         let response;
         try {
-            response = yield exports.openai.createChatCompletion({
+            response = yield openai.createChatCompletion({
                 model: 'gpt-3.5-turbo',
                 messages: [
                     {
@@ -91,9 +94,10 @@ function getNotes(splitContent, apiKey) {
 /*      SUMMARY SECTION      */
 function getSummaryChunk(chunk, apiKey) {
     return __awaiter(this, void 0, void 0, function* () {
+        const openai = configureAI(apiKey);
         let response;
         try {
-            response = yield exports.openai.createChatCompletion({
+            response = yield openai.createChatCompletion({
                 model: 'gpt-3.5-turbo',
                 messages: [
                     {
