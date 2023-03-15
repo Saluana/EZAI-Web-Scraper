@@ -15,20 +15,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = __importDefault(require("puppeteer"));
 const browserInstance = () => __awaiter(void 0, void 0, void 0, function* () {
     if (process.env.BROWSERLESS_API_KEY) {
-        console.log("Browserless is enabled");
+        console.log('Browserless is enabled');
         return yield puppeteer_1.default.connect({
-            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_API_KEY}`
+            browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_API_KEY}`,
         });
     }
     try {
         return puppeteer_1.default.launch({
             headless: true,
             args: [
-                "--disable-gpu",
-                "--disable-dev-shm-usage",
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-            ]
+                '--disable-gpu',
+                '--disable-dev-shm-usage',
+                '--disable-setuid-sandbox',
+                '--no-sandbox',
+            ],
         });
     }
     catch (error) {
@@ -40,15 +40,33 @@ function contentFinder(URI) {
     return __awaiter(this, void 0, void 0, function* () {
         const browser = yield browserInstance();
         const page = yield browser.newPage();
+        // Prevent images, ads, analytics, and stylesheets from being loaded
+        yield page.setRequestInterception(true);
+        page.on('request', (request) => {
+            const resourceType = request.resourceType();
+            if ([
+                'image',
+                'stylesheet',
+                'font',
+                'media',
+                'eventsource',
+                'websocket',
+            ].includes(resourceType)) {
+                request.abort();
+            }
+            else {
+                request.continue();
+            }
+        });
         try {
             yield page.goto(URI, {
-                waitUntil: "domcontentloaded",
+                waitUntil: 'domcontentloaded',
             });
         }
         catch (error) {
             console.log(error);
             browser.close();
-            return { status: "failure", message: "Error navigating to web page." };
+            return { status: 'failure', message: 'Error navigating to web page.' };
         }
         const title = yield page.title();
         try {
@@ -56,12 +74,17 @@ function contentFinder(URI) {
                 const body = document.querySelector('body');
                 const array = new Set();
                 let contentWasFound = false;
-                //Get all paragraph tags from any div with the class name of article or post or content
+                // Get all paragraph tags from any div with the class name of article or post or content
                 body.querySelectorAll('div').forEach((div) => {
                     for (let i = 0; i < div.classList.length; i++) {
-                        if (div.classList[i].includes('article') || div.classList[i].includes('post') || div.classList[i].includes('content')) {
+                        if (div.classList[i].includes('article') ||
+                            div.classList[i].includes('post') ||
+                            div.classList[i].includes('content')) {
                             div.querySelectorAll('p').forEach((p) => {
-                                array.add(p.innerText);
+                                const text = p.innerText;
+                                if (text.split(' ').length > 20) {
+                                    array.add(text);
+                                }
                             });
                             contentWasFound = true;
                             break;
@@ -76,10 +99,13 @@ function contentFinder(URI) {
             browser.close();
         }
         browser.close();
-        console.log(content.join(" "));
+        console.log(content.join(' '));
         if (content === null)
-            return { status: "failure", message: "No article found" };
-        return { status: "success", title: title, text: content };
+            return {
+                status: 'failure',
+                message: 'No article found',
+            };
+        return { status: 'success', title: title, text: content };
     });
 }
 exports.default = contentFinder;
