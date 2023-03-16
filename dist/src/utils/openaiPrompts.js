@@ -103,7 +103,7 @@ function getSummaryChunk(chunk, apiKey) {
                     {
                         //MARKDOWN
                         role: 'system',
-                        content: 'Write a short and concise summary of the text provided by the user. Remove any unwanted text, such as things related to website cookies, website newletters, and website advertisements.',
+                        content: 'Quickly write a very short and concise summary of the text provided by the user. The summary should be no longer then a Tweet. Remove any unwanted text, such as things related to website cookies, website newletters, and website advertisements.',
                     },
                     {
                         //RULES
