@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchNotesMultipleSites = exports.fetchNotes = void 0;
 const contentFilter_1 = __importDefault(require("../utils/contentFilter"));
 const openaiPrompts_1 = __importDefault(require("../utils/openaiPrompts"));
-const contentFinderCheerio_1 = require("../utils/contentFinderCheerio");
+const contentFinder_1 = require("../utils/contentFinder");
 const instanceCheck_1 = require("../utils/instanceCheck");
 function fetchNotes(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +31,7 @@ function fetchNotes(req, res) {
                 .json({ status: 'failure', message: 'No API key provided' });
         let textContent, title;
         try {
-            const page = yield (0, contentFinderCheerio_1.contentFinder)(URI);
+            const page = yield (0, contentFinder_1.contentFinder)(URI);
             if ((0, instanceCheck_1.instanceOfError)(page) || page.status === 'failure')
                 return res
                     .status(400)
@@ -93,7 +93,7 @@ function fetchNotesMultipleSites(req, res) {
         const notesPromises = URIs.map((url) => __awaiter(this, void 0, void 0, function* () {
             let textContent, title;
             try {
-                const page = yield (0, contentFinderCheerio_1.contentFinder)(url);
+                const page = yield (0, contentFinder_1.contentFinder)(url);
                 if ((0, instanceCheck_1.instanceOfError)(page) || page.status === 'failure')
                     return {
                         status: 'failure',

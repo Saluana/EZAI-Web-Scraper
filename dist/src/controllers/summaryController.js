@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchSummaries = exports.fetchSummary = void 0;
 const contentFilter_1 = __importDefault(require("../utils/contentFilter"));
 const openaiPrompts_1 = __importDefault(require("../utils/openaiPrompts"));
-const contentFinderCheerio_1 = require("../utils/contentFinderCheerio");
+const contentFinder_1 = require("../utils/contentFinder");
 const instanceCheck_1 = require("../utils/instanceCheck");
 function fetchSummary(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -32,7 +32,7 @@ function fetchSummary(req, res) {
         }
         let textContent, title;
         try {
-            const page = yield (0, contentFinderCheerio_1.contentFinder)(URI);
+            const page = yield (0, contentFinder_1.contentFinder)(URI);
             if ((0, instanceCheck_1.instanceOfError)(page) || page.status === 'failure')
                 return res
                     .status(400)
@@ -86,7 +86,7 @@ function fetchSummaries(req, res) {
                 .json({ status: 'failure', message: 'No API key provided' });
         }
         try {
-            const pages = yield (0, contentFinderCheerio_1.contentFinderMultiple)(URIs);
+            const pages = yield (0, contentFinder_1.contentFinderMultiple)(URIs);
             const summariesPromises = pages.map((page) => __awaiter(this, void 0, void 0, function* () {
                 if ((0, instanceCheck_1.instanceOfError)(page) || page.status === 'failure') {
                     return {

@@ -1,10 +1,7 @@
 import { Request, Response } from 'express';
 import contentFilter from '../utils/contentFilter';
 import prompt from '../utils/openaiPrompts';
-import {
-    contentFinder,
-    contentFinderMultiple,
-} from '../utils/contentFinderCheerio';
+import { contentFinder, contentFinderMultiple } from '../utils/contentFinder';
 import { instanceOfError } from '../utils/instanceCheck';
 
 async function fetchSummary(req: Request, res: Response) {

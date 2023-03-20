@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import contentFilter from '../utils/contentFilter';
 import prompt from '../utils/openaiPrompts';
-import { contentFinder } from '../utils/contentFinderCheerio';
+import { contentFinder } from '../utils/contentFinder';
 import { instanceOfSuccess, instanceOfError } from '../utils/instanceCheck';
 
 export async function fetchNotes(req: Request, res: Response) {
