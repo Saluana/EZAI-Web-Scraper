@@ -53,6 +53,7 @@ export async function contentFinder(URI: string) {
     try {
         await page.goto(URI, {
             waitUntil: 'domcontentloaded',
+            timeout: 3500,
         });
     } catch (error) {
         console.log(error);
@@ -139,6 +140,7 @@ export async function contentFinderMultiple(URIs: string[]) {
         try {
             await page.goto(URI, {
                 waitUntil: 'domcontentloaded',
+                timeout: 3500,
             });
         } catch (error) {
             console.log(error);

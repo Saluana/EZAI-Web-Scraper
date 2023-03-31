@@ -10,5 +10,4 @@ RUN apt-get update &&\
 COPY package*.json ./
 RUN npm install
 COPY . .
-ENV DISPLAY :99
-CMD Xvfb :99 -screen 0 1024x768x16 & npm start
+
